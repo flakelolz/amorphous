@@ -1,0 +1,10 @@
+[workspace]
+resolver = "3"
+members = ["crates/am-core"]
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+glam = { version = "0.34", features = ["serde"] }
+thiserror = "2.0"
+uuid = { version = "1.26", features = ["v4", "serde"] }
+indexmap = { version = "2.14", features = ["serde"] }
