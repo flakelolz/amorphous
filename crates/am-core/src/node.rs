@@ -21,10 +21,15 @@ impl Default for NodeId {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Node {
+    /// Node's unique identifier.
     id: NodeId,
+    /// Node's name. Initially inherited from the blueprint.
     name: String,
-    blueprint_id: BlueprintId,
+    /// Blueprint ID used to create the node.
+    blueprint: BlueprintId,
+    /// Node's properties. Initially inherited from the blueprint.
     properties: IndexMap<String, Value>,
+    /// Node's children.
     children: Vec<Node>,
 }
 
@@ -34,7 +39,7 @@ impl Node {
         Self {
             id: NodeId::new(),
             name: blueprint.name().into(),
-            blueprint_id: blueprint.id(),
+            blueprint: blueprint.id(),
             properties: blueprint.properties().clone(),
             children: Vec::new(),
         }
@@ -56,6 +61,11 @@ impl Node {
     pub fn with_child(mut self, child: Node) -> Self {
         self.add_child(child);
         self
+    }
+
+    /// Set the name of the node.
+    pub fn set_name(&mut self, name: impl Into<String>) {
+        self.name = name.into();
     }
 
     /// Insert a property into the node.
