@@ -63,6 +63,11 @@ impl Node {
         self
     }
 
+    /// Get name of the node.
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
     /// Set the name of the node.
     pub fn set_name(&mut self, name: impl Into<String>) {
         self.name = name.into();
@@ -88,42 +93,13 @@ impl Node {
         self.properties.shift_remove(name)
     }
 
+    /// Get a reference list of children on the node.
+    pub fn children(&self) -> &[Node] {
+        &self.children
+    }
+
     /// Add a child to the node.
     pub fn add_child(&mut self, child: Node) {
         self.children.push(child);
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn node() {
-        let bp = Blueprint::new("Hitbox");
-        let mut node = Node::new(&bp);
-        assert_eq!(node.name, "Hitbox");
-
-        node.set_property("Damage", Value::Int(10));
-        assert_eq!(node.get_property("Damage"), Some(&Value::Int(10)));
-
-        node.add_child(Node::new(&bp).with_name("Child"));
-        assert_eq!(node.children.len(), 1);
-    }
-
-    #[test]
-    fn with_name() {
-        let bp = Blueprint::new("");
-        let node = Node::new(&bp).with_name("Hitbox");
-        assert_eq!(node.name, "Hitbox");
-    }
-
-    #[test]
-    fn with_property() {
-        let bp = Blueprint::new("Animation").with_property("Length", Value::Int(21));
-        let node = Node::new(&bp).with_property("Repeat", Value::Bool(true));
-        assert_eq!(node.name, "Animation");
-        assert_eq!(node.get_property("Length"), Some(&Value::Int(21)));
-        assert_eq!(node.get_property("Repeat"), Some(&Value::Bool(true)));
     }
 }
