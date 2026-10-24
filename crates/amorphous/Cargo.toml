@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-am-core = { path = "../am-core" }
+am_core = { path = "../am-core" }
 gpui-kit = "0.8.0"
