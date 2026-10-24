@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["crates/am-core"]
+members = ["crates/am-core", "crates/amorphous"]
+default-members = ["crates/amorphous"]
 
 [workspace.dependencies]
 serde = { version = "1.0", features = ["derive"] }
