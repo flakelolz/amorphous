@@ -5,4 +5,9 @@ edition = "2024"
 
 [dependencies]
 am_core = { path = "../am-core" }
-gpui-kit = "0.8.0"
+eframe = "0.37.0"
+egui_extras = { version = "*", features = ["all_loaders"] }
+egui_tiles = "0.18.0"
+egui_ltreeview = "0.10.0"
+image = { version = "0.25", features = ["jpeg", "png"] }
+env_logger = "0.11.11"

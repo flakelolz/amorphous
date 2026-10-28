@@ -1,35 +1,57 @@
-use am_core::*;
-use gpui_kit::{
-    component::button::{Button, ButtonVariants},
-    *,
-};
+use eframe::egui;
 
-struct HelloWorld;
+fn main() -> eframe::Result {
+    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+    let options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default()
+            .with_app_id("dev.egui.amorphous")
+            .with_inner_size([320.0, 240.0]),
+        ..Default::default()
+    };
+    eframe::run_native(
+        "My egui App",
+        options,
+        Box::new(|cc| {
+            // This gives us image support:
+            egui_extras::install_image_loaders(&cc.egui_ctx);
 
-impl Render for HelloWorld {
-    fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-        div()
-            .flex()
-            .flex_col()
-            .size_full()
-            .items_center()
-            .justify_center()
-            .gap_2()
-            .child("Hello, World!")
-            .child(
-                Button::new("hello")
-                    .primary()
-                    .label("Click me")
-                    .on_click(|_, _, _| println!("Clicked!")),
-            )
+            Ok(Box::<MyApp>::default())
+        }),
+    )
+}
+
+struct MyApp {
+    name: String,
+    age: u32,
+}
+
+impl Default for MyApp {
+    fn default() -> Self {
+        Self {
+            name: "Michael".to_owned(),
+            age: 42,
+        }
     }
 }
 
-fn main() {
-    application().with_assets(assets::Assets).run(|cx| {
-        init(cx);
+impl eframe::App for MyApp {
+    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        egui::CentralPanel::default().show(ui, |ui| {
+            ui.heading("My egui Application");
+            ui.horizontal(|ui| {
+                let name_label = ui.label("Your name: ");
+                ui.text_edit_singleline(&mut self.name)
+                    .labelled_by(name_label.id);
+            });
+            ui.add(egui::Slider::new(&mut self.age, 0..=120).text("age"));
+            if ui.button("Increment").clicked() {
+                self.age += 1;
+            }
+            ui.label(format!("Hello '{}', age {}", self.name, self.age));
 
-        open_window(WindowOptions::default(), cx, |_, cx| cx.new(|_| HelloWorld))
-            .expect("Failed to open window");
-    });
+            // ui.image(egui::include_image!(
+            //     "../../../crates/egui/assets/ferris.png"
+            // ));
+        });
+    }
 }
